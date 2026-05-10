@@ -32,8 +32,8 @@ def init_db():
 init_db()
 
 # ================= MODELS =================
-stt_model = whisper.load_model("tiny")
-summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
+stt_model = None
+summarizer = None
 
 # ================= GLOBAL STATE =================
 PROGRESS = 0
@@ -104,14 +104,31 @@ def speakerwise_transcript(text):
 # ================= BACKGROUND PROCESS =================
 
 def process_audio(path, meta):
-    global PROGRESS, RESULT
+    global PROGRESS, RESULT, stt_model, summarizer
+
+    if stt_model is None:
+        stt_model = whisper.load_model("tiny")
+
+    if summarizer is None:
+        summarizer = pipeline(
+            "summarization",
+            model="sshleifer/distilbart-cnn-12-6"
+        )
+
     PROGRESS = 5
 
-    transcription = stt_model.transcribe(path, fp16=False, verbose=False)
+    # 🔥 Speech To Text
+    transcription = stt_model.transcribe(
+        path,
+        fp16=False,
+        verbose=False
+    )
+
     transcript = transcription["text"]
 
     PROGRESS = 50
 
+    # 🔥 Summary Generation
     summary = summarizer(
         transcript[:4000],
         max_length=200,
@@ -134,8 +151,10 @@ def process_audio(path, meta):
     # 🔥 SAVE HISTORY
     conn = sqlite3.connect("history.db")
     cur = conn.cursor()
+
     cur.execute("""
-        INSERT INTO history (title, date, platform, organizer, created_at)
+        INSERT INTO history
+        (title, date, platform, organizer, created_at)
         VALUES (?, ?, ?, ?, ?)
     """, (
         meta.get("title"),
@@ -144,11 +163,11 @@ def process_audio(path, meta):
         meta.get("organizer"),
         datetime.now().strftime("%d-%m-%Y %H:%M")
     ))
+
     conn.commit()
     conn.close()
 
     PROGRESS = 100
-
 # ================= ROUTES =================
 
 @app.route("/")

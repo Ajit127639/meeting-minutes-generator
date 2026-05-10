@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% block title %}About{% endblock %} {% block content
+%}
+<div class="card shadow">
+  <div class="card-body">
+    <h4>About Project</h4>
+    <p>
+      This is an NLP-based Automated Meeting Minutes Generator that converts
+      meeting audio into structured Minutes of Meeting.
+    </p>
+    <ul>
+      <li>Speech-to-Text using Whisper</li>
+      <li>Automatic summarization</li>
+      <li>Decision & Action extraction</li>
+      <li>History tracking using SQLite</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

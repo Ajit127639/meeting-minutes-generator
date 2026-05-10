@@ -1,0 +1,83 @@
+{% extends "base.html" %} {% block title %}Result{% endblock %} {% block content
+%}
+<div class="card shadow">
+  <div class="card-header bg-success text-white">
+    <h5 class="mb-0">Minutes of Meeting</h5>
+  </div>
+
+  <div class="card-body">
+    <p><b>Title:</b> {{data.meta.title}}</p>
+    <p><b>Date:</b> {{data.meta.date}} | <b>Time:</b> {{data.meta.time}}</p>
+    <p>
+      <b>Platform:</b> {{data.meta.platform}} |
+      <b>Organizer:</b> {{data.meta.organizer}}
+    </p>
+
+    <ul class="nav nav-tabs mt-3" role="tablist">
+      <li class="nav-item">
+        <button
+          class="nav-link active"
+          data-bs-toggle="tab"
+          data-bs-target="#summary"
+        >
+          Summary
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          class="nav-link"
+          data-bs-toggle="tab"
+          data-bs-target="#decisions"
+        >
+          Decisions
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#actions">
+          Actions
+        </button>
+      </li>
+      <li class="nav-item">
+        <button
+          class="nav-link"
+          data-bs-toggle="tab"
+          data-bs-target="#transcript"
+        >
+          Transcript
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content border p-3">
+      <div class="tab-pane fade show active" id="summary">
+        <p>{{data.summary}}</p>
+      </div>
+
+      <div class="tab-pane fade" id="decisions">
+        <ul class="list-group">
+          {% for d in data.decisions %}
+          <li class="list-group-item">{{d}}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="tab-pane fade" id="actions">
+        <ul class="list-group">
+          {% for a in data.actions %}
+          <li class="list-group-item">{{a}}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="tab-pane fade" id="transcript">
+        <pre style="white-space: pre-wrap">{{data.transcript}}</pre>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="/download" class="btn btn-danger">Download PDF</a>
+      <a href="/" class="btn btn-secondary ms-2">New Meeting</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

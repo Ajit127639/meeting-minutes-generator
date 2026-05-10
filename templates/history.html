@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% block title %}History{% endblock %} {% block
+content %}
+<div class="card shadow">
+  <div class="card-header bg-dark text-white">
+    <h5 class="mb-0">Meeting History</h5>
+  </div>
+
+  <div class="card-body">
+    {% if history|length == 0 %}
+    <p class="text-muted">No history available.</p>
+    {% else %}
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Platform</th>
+            <th>Organizer</th>
+            <th>Generated On</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in history %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td class="text-center">
+              <form
+                method="POST"
+                action="/delete_history/{{ row[0] }}"
+                onsubmit="return confirm('Delete this history record?');"
+              >
+                <button class="btn btn-sm btn-danger">🗑 Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

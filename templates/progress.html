@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block title %}Processing{% endblock %} {% block
+content %}
+<div class="text-center">
+  <h4>Processing Meeting Audio</h4>
+  <p class="text-muted">Please wait…</p>
+
+  <div class="progress" style="height: 25px">
+    <div
+      id="bar"
+      class="progress-bar progress-bar-striped progress-bar-animated"
+      style="width: 10%"
+    >
+      10%
+    </div>
+  </div>
+</div>
+
+<script>
+  setInterval(() => {
+    fetch("/progress")
+      .then((r) => r.json())
+      .then((d) => {
+        let bar = document.getElementById("bar");
+        bar.style.width = d.progress + "%";
+        bar.innerText = d.progress + "%";
+        if (d.progress >= 100) {
+          window.location = "/result";
+        }
+      });
+  }, 1000);
+</script>
+{% endblock %}

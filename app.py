@@ -32,8 +32,8 @@ def init_db():
 init_db()
 
 # ================= MODELS =================
-stt_model = whisper.load_model("base")
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+stt_model = whisper.load_model("tiny")
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
 
 # ================= GLOBAL STATE =================
 PROGRESS = 0
